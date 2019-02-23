@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.Instant;
+import java.util.Date;
 
 @Document
 public class Answer {
@@ -20,7 +20,7 @@ public class Answer {
   private String userId;
   private String answer;
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Instant submitTime;
+  private Date submitTime = Date.from(Instant.now());
   @Indexed
   private String questionId;
   @Indexed
@@ -59,11 +59,11 @@ public class Answer {
     this.answer = answer;
   }
 
-  public Instant getSubmitTime() {
+  public Date getSubmitTime() {
     return submitTime;
   }
 
-  public void setSubmitTime(Instant submitTime) {
+  public void setSubmitTime(Date submitTime) {
     this.submitTime = submitTime;
   }
 

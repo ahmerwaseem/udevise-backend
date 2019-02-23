@@ -1,9 +1,12 @@
 package com.udevise.web.services;
 
 import com.udevise.web.domain.Question;
+import com.udevise.web.exceptions.NotFoundException;
 import com.udevise.web.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -16,7 +19,12 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public Question findById() {
-    return null;
+  public Question findById(String id) {
+    Optional<Question> question = questionRepository.findById(id);
+    if (!question.isPresent()){
+      throw new NotFoundException("No Questions found with Question id: " + id);
+    }
+
+    return question.get();
   }
 }

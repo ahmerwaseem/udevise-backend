@@ -6,5 +6,5 @@ import com.udevise.web.domain.Question;
 import java.util.Optional;
 
 public interface QuestionService {
-  Question findById();
+  Question findById(String id);
 }

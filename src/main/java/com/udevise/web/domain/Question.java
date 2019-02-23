@@ -13,7 +13,6 @@ public class Question {
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String id;
-  private int sortOrder;
   private QuestionType type;
   private String question;
   private List<String> answersAllowed;
@@ -27,14 +26,6 @@ public class Question {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public int getSortOrder() {
-    return sortOrder;
-  }
-
-  public void setSortOrder(int sortOrder) {
-    this.sortOrder = sortOrder;
   }
 
   public QuestionType getType() {

@@ -50,6 +50,17 @@ public class AnswerServiceImpl implements AnswerService {
   @Override
   public boolean isAnswerAllowedForQuestion (Answer answer) {
     Optional<Question> question = questionRepository.findById(answer.getQuestionId());
+    return isAnswerAllowedForQuestion(answer,question);
+  }
+
+  @Override
+  public boolean isAnswerAllowedForQuestion (Answer answer, String questionId) {
+    Optional<Question> question = questionRepository.findById(questionId);
+    return isAnswerAllowedForQuestion(answer,question);
+  }
+
+  @Override
+  public boolean isAnswerAllowedForQuestion (Answer answer, Optional<Question> question) {
     if (question.isPresent()) {
       if (question.get().getAnswersAllowed()==null || question.get().getAnswersAllowed().isEmpty()) {
         return true;
@@ -58,12 +69,24 @@ public class AnswerServiceImpl implements AnswerService {
           return question.get().getAnswersAllowed().contains(answer.getAnswer().trim());
         }
       }
-    } else throw new DataMismatchException();
+    } else throw new DataMismatchException("Invalid request made");
     return false;
   }
 
   @Override
-  public boolean isAnswerAllowedForQuestion(Answer answer, String questionId) {
-    return false;
+  public boolean isAnswerListAllFromOneQuestionnaire(List<Answer> answerList) {
+    String questionnaireId = null;
+    if (answerList != null && answerList.size()>0){
+      questionnaireId = answerList.get(0).getQuestionnaireId();
+      if (questionnaireId == null)
+        return false;
+    }
+
+    for (Answer answer : answerList) {
+      if (answer.getQuestionnaireId() != questionnaireId)
+        return false;
+    }
+
+    return true;
   }
 }

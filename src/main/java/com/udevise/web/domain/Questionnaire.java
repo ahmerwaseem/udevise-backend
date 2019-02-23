@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Document
@@ -22,8 +22,8 @@ public class Questionnaire {
   private String title;
   private String description;
   private List<Question> questions;
-  private Instant beginDateTime;
-  private Instant endDateTime;
+  private Date beginDateTime;
+  private Date endDateTime;
   private List<String> usersAllowedByEmail;
 
   public String getId() {
@@ -74,19 +74,19 @@ public class Questionnaire {
     this.questions = questions;
   }
 
-  public Instant getBeginDateTime() {
+  public Date getBeginDateTime() {
     return beginDateTime;
   }
 
-  public void setBeginDateTime(Instant beginDateTime) {
+  public void setBeginDateTime(Date beginDateTime) {
     this.beginDateTime = beginDateTime;
   }
 
-  public Instant getEndDateTime() {
+  public Date getEndDateTime() {
     return endDateTime;
   }
 
-  public void setEndDateTime(Instant endDateTime) {
+  public void setEndDateTime(Date endDateTime) {
     this.endDateTime = endDateTime;
   }
 
