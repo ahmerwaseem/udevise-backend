@@ -1,6 +1,7 @@
 package com.udevise.web.services;
 
 import com.udevise.web.domain.Question;
+import com.udevise.web.domain.QuestionType;
 import com.udevise.web.exceptions.NotFoundException;
 import com.udevise.web.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,16 @@ public class QuestionServiceImpl implements QuestionService {
     if (!question.isPresent()){
       throw new NotFoundException("No Questions found with Question id: " + id);
     }
-
     return question.get();
   }
+
+  public Question save(Question question) {
+    if (question != null){
+      if (question.getType() == QuestionType.TEXT_BOX) {
+        question.setAnswersAllowed(null);
+      }
+    }
+    return questionRepository.save(question);
+  }
+
 }

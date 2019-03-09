@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Questionnaire {
   @JsonIgnore
   private String creatorId;
   private boolean isAnonymous;
+  @NotBlank
   private String title;
   private String description;
   private List<Question> questions;

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document
-public class Question {
+public class  Question {
   @Id
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
