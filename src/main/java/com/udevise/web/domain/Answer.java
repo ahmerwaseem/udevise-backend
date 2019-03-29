@@ -9,23 +9,45 @@ import java.util.Date;
 
 @Document
 public class Answer {
-
   @Id
-  @Indexed
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String id;
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
   private User user;
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
+  private String question;
+
   private String userId;
+
   private String answer;
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private Date submitTime = Date.from(Instant.now());
+
   @Indexed
   private String questionId;
-  @Indexed
+
   private String questionnaireId;
 
+  public String getQuestionnaireId() {
+    return questionnaireId;
+  }
+
+  public void setQuestionnaireId(String questionnaireId) {
+    this.questionnaireId = questionnaireId;
+  }
+
+  public String getAnswer() {
+    return answer;
+  }
+
+  public void setAnswer(String answer) {
+    this.answer = answer;
+  }
+
+  public String getQuestionId() {
+    return questionId;
+  }
+
+  public void setQuestionId(String questionId) {
+    this.questionId = questionId;
+  }
 
   public String getId() {
     return id;
@@ -51,35 +73,11 @@ public class Answer {
     this.userId = userId;
   }
 
-  public String getAnswer() {
-    return answer;
+  public String getQuestion() {
+    return question;
   }
 
-  public void setAnswer(String answer) {
-    this.answer = answer;
-  }
-
-  public Date getSubmitTime() {
-    return submitTime;
-  }
-
-  public void setSubmitTime(Date submitTime) {
-    this.submitTime = submitTime;
-  }
-
-  public String getQuestionId() {
-    return questionId;
-  }
-
-  public void setQuestionId(String questionId) {
-    this.questionId = questionId;
-  }
-
-  public String getQuestionnaireId() {
-    return questionnaireId;
-  }
-
-  public void setQuestionnaireId(String questionnaireId) {
-    this.questionnaireId = questionnaireId;
+  public void setQuestion(String question) {
+    this.question = question;
   }
 }

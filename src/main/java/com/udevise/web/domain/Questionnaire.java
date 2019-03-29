@@ -19,10 +19,11 @@ public class Questionnaire {
   private String id;
   @JsonIgnore
   private String creatorId;
-  private boolean isAnonymous;
+  private Boolean isAnonymous;
   @NotBlank
   private String title;
   private String description;
+  private List<Response> responses;
   private List<Question> questions;
   private Date beginDateTime;
   private Date endDateTime;
@@ -44,11 +45,11 @@ public class Questionnaire {
     this.creatorId = creatorId;
   }
 
-  public boolean getAnonymous() {
+  public Boolean getAnonymous() {
     return isAnonymous;
   }
 
-  public void setAnonymous(boolean anonymous) {
+  public void setAnonymous(Boolean anonymous) {
     isAnonymous = anonymous;
   }
 
@@ -98,5 +99,13 @@ public class Questionnaire {
 
   public void setUsersAllowedByEmail(List<String> usersAllowedByEmail) {
     this.usersAllowedByEmail = usersAllowedByEmail;
+  }
+
+  public List<Response> getResponses() {
+    return responses;
+  }
+
+  public void setResponses(List<Response> responses) {
+    this.responses = responses;
   }
 }

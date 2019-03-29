@@ -1,6 +1,7 @@
 package com.udevise.web.Utilities;
 
 import com.udevise.web.domain.User;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -42,5 +43,9 @@ public class UserUtils {
       user.setFirstName((String) map.get("given_name"));
       user.setLastName((String) map.get("family_name"));
     }
+  }
+
+  public static User getUserFromPrincipal(UsernamePasswordAuthenticationToken principal) {
+    return (User) principal.getPrincipal();
   }
 }

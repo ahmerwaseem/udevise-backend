@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface QuestionnaireRepository extends PagingAndSortingRepository<Questionnaire,String> {
   Optional<List<Questionnaire>> findByCreatorId(String id);
   Optional<Questionnaire> getQuestionnairesById(String id);
+  Questionnaire save(Questionnaire questionnaire);
 }

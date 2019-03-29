@@ -28,9 +28,10 @@ public class QuestionServiceImpl implements QuestionService {
     return question.get();
   }
 
+  @Override
   public Question save(Question question) {
     if (question != null){
-      if (question.getType() == QuestionType.TEXT_BOX) {
+      if (question.getType() == QuestionType.TEXT) {
         question.setAnswersAllowed(null);
       }
     }

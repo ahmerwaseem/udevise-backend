@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface QuestionnaireService {
   Questionnaire save(Questionnaire questionnaire);
-  Questionnaire findById(String id);
-  QuestionnaireResults getQuestionnaireResults(String id);
-  List<QuestionnaireResults> getQuestionnaireByCreatorId(String creatorId);
-  List<QuestionnaireResults> getQuestionnaireByCreatorEmail(String creatorId);
+  Questionnaire getQuestionnaireForRespondent(String id);
+  //Questionnaire getQuestionnaireForRespondent(String id);
+ // QuestionnaireResults getQuestionnaireResults(String id);
+//  List<QuestionnaireResults> getQuestionnaireByCreatorId(String creatorId);
+//  List<QuestionnaireResults> getQuestionnaireByCreatorEmail(String creatorId);
 
 }

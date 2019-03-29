@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document
-public class  Question {
+public class Question {
   @Id
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -16,9 +16,19 @@ public class  Question {
   private QuestionType type;
   private String question;
   private List<String> answersAllowed;
+  private List<Answer> answersGiven;
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String questionnaireId;
+  boolean required;
+
+  public boolean isRequired() {
+    return required;
+  }
+
+  public void setRequired(boolean required) {
+    this.required = required;
+  }
 
   public String getId() {
     return id;
@@ -58,5 +68,13 @@ public class  Question {
 
   public void setQuestionnaireId(String questionnaireId) {
     this.questionnaireId = questionnaireId;
+  }
+
+  public List<Answer> getAnswersGiven() {
+    return answersGiven;
+  }
+
+  public void setAnswersGiven(List<Answer> answersGiven) {
+    this.answersGiven = answersGiven;
   }
 }
