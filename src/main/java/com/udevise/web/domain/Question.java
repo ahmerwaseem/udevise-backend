@@ -1,34 +1,23 @@
 package com.udevise.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
-@Document
 public class Question {
-  @Id
-  @Indexed
+
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private String id;
+  private String id = UUID.randomUUID().toString();
+  @NotNull
   private QuestionType type;
+  @NotBlank
   private String question;
   private List<String> answersAllowed;
-  private List<Answer> answersGiven;
-  @Indexed
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private String questionnaireId;
   boolean required;
-
-  public boolean isRequired() {
-    return required;
-  }
-
-  public void setRequired(boolean required) {
-    this.required = required;
-  }
 
   public String getId() {
     return id;
@@ -36,6 +25,14 @@ public class Question {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public boolean isRequired() {
+    return required;
+  }
+
+  public void setRequired(boolean required) {
+    this.required = required;
   }
 
   public QuestionType getType() {
@@ -62,19 +59,4 @@ public class Question {
     this.answersAllowed = answersAllowed;
   }
 
-  public String getQuestionnaireId() {
-    return questionnaireId;
-  }
-
-  public void setQuestionnaireId(String questionnaireId) {
-    this.questionnaireId = questionnaireId;
-  }
-
-  public List<Answer> getAnswersGiven() {
-    return answersGiven;
-  }
-
-  public void setAnswersGiven(List<Answer> answersGiven) {
-    this.answersGiven = answersGiven;
-  }
 }

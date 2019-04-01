@@ -5,6 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +20,12 @@ public class Response {
   private String id;
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private User user;
+  @NotEmpty
   private List<Answer> answers;
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private Date submitTime = Date.from(Instant.now());
   @Indexed
+  @NotBlank
   private String questionnaireId;
 
   public List<Answer> getAnswers() {

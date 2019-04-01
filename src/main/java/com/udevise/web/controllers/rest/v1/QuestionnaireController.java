@@ -45,21 +45,5 @@ public class QuestionnaireController {
 
   }
 
-  @GetMapping(path = "/yo")
-  public List<QuestionnaireResults> yo(Principal principal) {
-    User user = UserUtils.getUserFromPrincipal((UsernamePasswordAuthenticationToken) principal);
-    List<QuestionnaireResults> questionnaire = questionnaireService.getQuestionnaireResults(user);
-    return questionnaire;
-
-  }
-
-
-
-//  @GetMapping(path = "/secure")
-//  public List<QuestionnaireResults> getQuestionnaireForUser(Principal principal) {
-//    User user = getUserFromPrincipal((UsernamePasswordAuthenticationToken) principal);
-//    return questionnaireService.getQuestionnaireByCreatorId(user.getId());
-//
-//  }
 
 }

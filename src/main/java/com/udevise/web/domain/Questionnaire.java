@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +21,11 @@ public class Questionnaire {
   private String id;
   @JsonIgnore
   private String creatorId;
-  private Boolean isAnonymous;
+  private boolean isAnonymous;
   @NotBlank
   private String title;
   private String description;
-  private List<Response> responses;
+  @NotEmpty
   private List<Question> questions;
   private Date beginDateTime;
   private Date endDateTime;
@@ -45,11 +47,11 @@ public class Questionnaire {
     this.creatorId = creatorId;
   }
 
-  public Boolean getAnonymous() {
+  public boolean getAnonymous() {
     return isAnonymous;
   }
 
-  public void setAnonymous(Boolean anonymous) {
+  public void setAnonymous(boolean anonymous) {
     isAnonymous = anonymous;
   }
 
@@ -99,13 +101,5 @@ public class Questionnaire {
 
   public void setUsersAllowedByEmail(List<String> usersAllowedByEmail) {
     this.usersAllowedByEmail = usersAllowedByEmail;
-  }
-
-  public List<Response> getResponses() {
-    return responses;
-  }
-
-  public void setResponses(List<Response> responses) {
-    this.responses = responses;
   }
 }

@@ -4,42 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.util.Date;
 
-@Document
 public class Answer {
-  @Id
-  private String id;
-
-  private User user;
 
   private String question;
 
-  private String userId;
-
   private String answer;
 
-  @Indexed
+  @NotBlank
   private String questionId;
-
-  private String questionnaireId;
-
-  public String getQuestionnaireId() {
-    return questionnaireId;
-  }
-
-  public void setQuestionnaireId(String questionnaireId) {
-    this.questionnaireId = questionnaireId;
-  }
-
-  public String getAnswer() {
-    return answer;
-  }
-
-  public void setAnswer(String answer) {
-    this.answer = answer;
-  }
 
   public String getQuestionId() {
     return questionId;
@@ -49,28 +27,12 @@ public class Answer {
     this.questionId = questionId;
   }
 
-  public String getId() {
-    return id;
+  public String getAnswer() {
+    return answer;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setAnswer(String answer) {
+    this.answer = answer;
   }
 
   public String getQuestion() {

@@ -23,15 +23,15 @@ public class SigningKeyResolver extends SigningKeyResolverAdapter {
 
   @Override
   public Key resolveSigningKey(JwsHeader jwsHeader, Claims claims) {
-    //inspect the header and return the signing key
-    String keyId = jwsHeader.getKeyId(); //or any other field that you need to inspect
-    Key key = lookupVerificationKey(keyId); //implement me
+    String keyId = jwsHeader.getKeyId();
+    Key key = lookupVerificationKey(keyId);
     return key;
   }
 
   private Key lookupVerificationKey(String keyId) {
     JwkProvider provider = new UrlJwkProvider(auth0Properties.getIssuer());
     try {
+      //get public key from auth0
       Jwk jwk = provider.get(keyId);
       return jwk.getPublicKey();
     } catch (JwkException e){
