@@ -54,7 +54,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     chain.doFilter(req, res);
   }
 
-  private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+  private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request)  {
     String token = request.getHeader(HEADER_STRING);
     System.out.println("token" + token);
     Jws<Claims> claimsJws;
@@ -73,7 +73,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
       }
     } catch (Exception e) {
-      throw new UnauthorizedException();
+      return null;
     }
     return null;
   }

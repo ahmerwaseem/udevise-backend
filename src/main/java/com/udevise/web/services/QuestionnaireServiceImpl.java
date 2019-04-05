@@ -1,9 +1,11 @@
 package com.udevise.web.services;
 
+import com.mongodb.client.MongoCollection;
 import com.udevise.web.domain.*;
 import com.udevise.web.exceptions.NotFoundException;
 import com.udevise.web.repositories.QuestionnaireRepository;
 import com.udevise.web.repositories.ResponseRepository;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,7 +32,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   @Override
   public Questionnaire save(Questionnaire questionnaire) {
     for (Question s : questionnaire.getQuestions()){
-      if (s.getType() == QuestionType.TEXT){
+      if (s.getType() == QuestionType.TEXT || s.getType() == QuestionType.TEXTAREA){
         s.setAnswersAllowed(null);
       }
     }
@@ -62,6 +64,12 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       }
     }
     return questionnaires;
+  }
+
+
+  public void test(){
+    MongoCollection<Document> collection = mongoTemplate.getCollection("questionnaire");
+
   }
 
 }

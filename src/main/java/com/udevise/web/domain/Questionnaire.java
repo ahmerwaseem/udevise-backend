@@ -19,6 +19,7 @@ public class Questionnaire {
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String id;
+  private QuestionType type;
   @JsonIgnore
   private String creatorId;
   private boolean isAnonymous;
@@ -101,5 +102,13 @@ public class Questionnaire {
 
   public void setUsersAllowedByEmail(List<String> usersAllowedByEmail) {
     this.usersAllowedByEmail = usersAllowedByEmail;
+  }
+
+  public QuestionType getType() {
+    return type;
+  }
+
+  public void setType(QuestionType type) {
+    this.type = type;
   }
 }

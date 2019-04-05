@@ -12,12 +12,17 @@ import java.util.Date;
 
 public class Answer {
 
+  private boolean correct;
+
   private String question;
 
   private String answer;
 
   @NotBlank
   private String questionId;
+
+  @NotBlank
+  private QuestionType questionType;
 
   public String getQuestionId() {
     return questionId;
@@ -41,5 +46,13 @@ public class Answer {
 
   public void setQuestion(String question) {
     this.question = question;
+  }
+
+  public QuestionType getQuestionType() {
+    return questionType;
+  }
+
+  public void setQuestionType(QuestionType questionType) {
+    this.questionType = questionType;
   }
 }

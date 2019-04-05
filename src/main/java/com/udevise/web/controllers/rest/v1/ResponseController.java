@@ -24,7 +24,7 @@ public class ResponseController {
   @PostMapping
   public ResponseEntity submitAnswers(@RequestBody Response response, Principal principal) {
     responseService.save(response);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 
 }

@@ -1,4 +1,6 @@
 package com.udevise.web.domain;
 
-public class QuestionnaireType {
+public enum QuestionnaireType {
+  SURVEY,
+  QUIZ
 }
