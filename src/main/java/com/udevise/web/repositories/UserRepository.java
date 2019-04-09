@@ -1,6 +1,6 @@
 package com.udevise.web.repositories;
 
-import com.udevise.web.domain.User;
+import com.udevise.web.domain.model.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

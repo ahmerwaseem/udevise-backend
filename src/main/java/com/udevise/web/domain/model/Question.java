@@ -1,7 +1,7 @@
-package com.udevise.web.domain;
+package com.udevise.web.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.lang.NonNull;
+import com.udevise.web.domain.enums.QuestionType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

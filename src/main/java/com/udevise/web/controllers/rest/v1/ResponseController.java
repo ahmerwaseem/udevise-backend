@@ -1,7 +1,8 @@
 package com.udevise.web.controllers.rest.v1;
 
-import com.udevise.web.domain.Response;
-import com.udevise.web.services.ResponseService;
+import com.udevise.web.Utilities.UserUtils;
+import com.udevise.web.domain.requests.ResponseRequest;
+import com.udevise.web.services.QuestionnaireService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,18 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/answer")
+@RequestMapping("/api/v1/response")
 public class ResponseController {
 
-  private ResponseService responseService;
+  private QuestionnaireService questionnaireService;
 
-  public ResponseController(ResponseService responseService) {
-    this.responseService = responseService;
+
+  public ResponseController(QuestionnaireService questionnaireService) {
+    this.questionnaireService = questionnaireService;
   }
 
   @PostMapping
-  public ResponseEntity submitAnswers(@RequestBody Response response, Principal principal) {
-    responseService.save(response);
+  public ResponseEntity submitAnswers(@RequestBody ResponseRequest responseRequest, Principal principal) {
+
+    questionnaireService.saveQuestionnaireResponse(responseRequest, UserUtils.getUserFromPrincipal(principal));
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 

@@ -1,8 +1,7 @@
 package com.udevise.web.filters;
 
 import com.udevise.web.Utilities.UserUtils;
-import com.udevise.web.domain.User;
-import com.udevise.web.exceptions.UnauthorizedException;
+import com.udevise.web.domain.model.User;
 import com.udevise.web.security.Auth0Properties;
 import com.udevise.web.security.SigningKeyResolver;
 

@@ -1,35 +1,42 @@
-package com.udevise.web.domain;
+package com.udevise.web.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.udevise.web.domain.enums.QuestionnaireType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 @Document
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Questionnaire {
 
   @Id
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private String id;
-  private QuestionType type;
+  private QuestionnaireType type;
   @JsonIgnore
   private String creatorId;
-  private boolean isAnonymous;
   @NotBlank
   private String title;
   private String description;
   @NotEmpty
   private List<Question> questions;
+  @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
   private Date beginDateTime;
+  @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
   private Date endDateTime;
+  private List<Response> responses;
+
+  
   private List<String> usersAllowedByEmail;
 
   public String getId() {
@@ -46,14 +53,6 @@ public class Questionnaire {
 
   public void setCreatorId(String creatorId) {
     this.creatorId = creatorId;
-  }
-
-  public boolean getAnonymous() {
-    return isAnonymous;
-  }
-
-  public void setAnonymous(boolean anonymous) {
-    isAnonymous = anonymous;
   }
 
   public String getTitle() {
@@ -104,11 +103,19 @@ public class Questionnaire {
     this.usersAllowedByEmail = usersAllowedByEmail;
   }
 
-  public QuestionType getType() {
+  public QuestionnaireType getType() {
     return type;
   }
 
-  public void setType(QuestionType type) {
+  public void setType(QuestionnaireType type) {
     this.type = type;
+  }
+
+  public List<Response> getResponses() {
+    return responses;
+  }
+
+  public void setResponses(List<Response> responses) {
+    this.responses = responses;
   }
 }

@@ -1,8 +1,11 @@
 package com.udevise.web.services;
 
 import com.mongodb.client.MongoCollection;
-import com.udevise.web.domain.*;
-import com.udevise.web.exceptions.NotFoundException;
+import com.udevise.web.domain.model.*;
+import com.udevise.web.domain.requests.AnswerRequest;
+import com.udevise.web.domain.requests.ResponseRequest;
+import com.udevise.web.domain.enums.QuestionType;
+import com.udevise.web.exceptions.DataMismatchException;
 import com.udevise.web.repositories.QuestionnaireRepository;
 import com.udevise.web.repositories.ResponseRepository;
 import org.bson.Document;
@@ -30,17 +33,18 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   @Override
-  public Questionnaire save(Questionnaire questionnaire) {
+  public Questionnaire saveNewQuestionnaire(Questionnaire questionnaire) {
     for (Question s : questionnaire.getQuestions()){
       if (s.getType() == QuestionType.TEXT || s.getType() == QuestionType.TEXTAREA){
         s.setAnswersAllowed(null);
+        s.setCorrectAnswer(null);
       }
     }
     return questionnaireRepository.save(questionnaire);
   }
 
  // @Override
-  public Questionnaire getQuestionnaireForRespondent(String id) {
+  public Questionnaire getQuestionnaireForResponses(String id) {
     Query q = new Query();
     q.addCriteria(Criteria.where("_id").is(new ObjectId(id)))
       .fields()
@@ -51,21 +55,47 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     return questionnaire;
   }
 
-  public List<QuestionnaireResults> getQuestionnaireResults(User user) {
-    Query q = new Query();
-    q.addCriteria(Criteria.where("creatorId").is(user.getId()));
-    List<QuestionnaireResults> questionnaires = mongoTemplate.find(q,QuestionnaireResults.class);
-
-    for (QuestionnaireResults questionnaire: questionnaires ) {
-      Optional<List<Response>> responseList = responseRepository.findAllByQuestionnaireId(questionnaire.getId());
-
-      if (responseList.isPresent()) {
-        questionnaire.setResponses(responseList.get());
-      }
-    }
-    return questionnaires;
+  public List<Questionnaire> getQuestionnairesByUser(User user) {
+    return questionnaireRepository.findByCreatorId(user.getId()).get();
   }
 
+  @Override
+  public void saveQuestionnaireResponse(ResponseRequest request, User user) {
+    Optional<Questionnaire> questionnaire = questionnaireRepository.getQuestionnairesById(request.getQuestionnaireId());
+    if (!questionnaire.isPresent()){
+      throw new DataMismatchException("Questionnaire Not Found");
+    }
+
+    List<Question> questionList= questionnaire.get().getQuestions();
+
+    for (AnswerRequest answerRequest : request.getAnswers()){
+      for (Question question : questionList) {
+        if (answerRequest.getQuestionId().equalsIgnoreCase(question.getId())){
+          if (question.getAnswersGiven() == null){
+            question.setAnswersGiven(new ArrayList<>());
+          }
+          Answer answer = new Answer(user,answerRequest.getAnswer());
+          question.getAnswersGiven().add(answer);
+        }
+      }
+    }
+
+    List<Response> responseList = questionnaire.get().getResponses();
+    if (responseList == null){
+      responseList = new ArrayList<>();
+    }
+    responseList.add(new Response(user));
+    questionnaire.get().setResponses(responseList);
+
+    questionnaireRepository.save(questionnaire.get());
+
+  }
+
+  @Override
+  public void saveQuestionnaireResponse(ResponseRequest request) {
+    saveQuestionnaireResponse(request,null);
+
+  }
 
   public void test(){
     MongoCollection<Document> collection = mongoTemplate.getCollection("questionnaire");

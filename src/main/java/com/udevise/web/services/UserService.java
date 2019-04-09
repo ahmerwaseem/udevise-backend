@@ -1,6 +1,6 @@
 package com.udevise.web.services;
 
-import com.udevise.web.domain.User;
+import com.udevise.web.domain.model.User;
 
 public interface UserService {
   User save(User user);

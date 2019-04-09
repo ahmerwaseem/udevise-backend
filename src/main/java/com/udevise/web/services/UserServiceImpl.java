@@ -1,7 +1,6 @@
 package com.udevise.web.services;
 
-import com.udevise.web.domain.User;
-import com.udevise.web.exceptions.NotFoundException;
+import com.udevise.web.domain.model.User;
 import com.udevise.web.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

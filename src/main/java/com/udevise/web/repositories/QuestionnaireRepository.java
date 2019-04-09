@@ -1,6 +1,6 @@
 package com.udevise.web.repositories;
 
-import com.udevise.web.domain.Questionnaire;
+import com.udevise.web.domain.model.Questionnaire;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
