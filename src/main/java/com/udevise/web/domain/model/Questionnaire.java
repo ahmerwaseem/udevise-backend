@@ -35,6 +35,9 @@ public class Questionnaire {
   @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
   private Date endDateTime;
   private List<Response> responses;
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
+  private Date createTime;
 
   
   private List<String> usersAllowedByEmail;
@@ -117,5 +120,13 @@ public class Questionnaire {
 
   public void setResponses(List<Response> responses) {
     this.responses = responses;
+  }
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
 }

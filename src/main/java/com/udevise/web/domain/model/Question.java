@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Question {
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-  private String id = UUID.randomUUID().toString();
+  private String id;
   @NotNull
   private QuestionType type;
   @NotBlank

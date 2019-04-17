@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     configuration.setAllowedMethods(Arrays.asList("GET","POST"));
     configuration.setAllowCredentials(true);
     //need that sweet jwt
-    configuration.addAllowedHeader("Authorization");
+    configuration.addAllowedHeader  ("Authorization");
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
@@ -48,8 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().cors().and().authorizeRequests()
       .antMatchers(HttpMethod.GET, "/api/v1/questionnaire").permitAll()
-      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/all").authenticated()
-      .antMatchers(HttpMethod.POST, "/api/v1/questionnaire").authenticated()
+      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/{id}*").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/v1/questionnaire").permitAll()
       .and()
       .addFilter(new JWTAuthorizationFilter(authenticationManager(),auth0Properties, userService)) ;
   }

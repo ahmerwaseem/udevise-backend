@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface QuestionnaireRepository extends PagingAndSortingRepository<Questionnaire,String> {
+  Optional<Questionnaire> findByIdAndCreatorId(String id, String creatorId);
   Optional<List<Questionnaire>> findByCreatorId(String id);
   Optional<Questionnaire> getQuestionnairesById(String id);
   Questionnaire save(Questionnaire questionnaire);

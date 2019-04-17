@@ -1,16 +1,21 @@
 package com.udevise.web.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 public class Response {
 
-  public Response(User user) {
+  public Response(User user, String responseId) {
     this.user = user;
+    this.responseId = responseId;
   }
+
+  public String responseId;
 
   @DBRef
   private User user;
@@ -32,5 +37,13 @@ public class Response {
 
   public void setSubmitTime(Date submitTime) {
     this.submitTime = submitTime;
+  }
+
+  public String getResponseId() {
+    return responseId;
+  }
+
+  public void setResponseId(String responseId) {
+    this.responseId = responseId;
   }
 }

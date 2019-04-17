@@ -1,11 +1,15 @@
 package com.udevise.web.Utilities;
 
+import com.udevise.web.domain.model.Questionnaire;
+import com.udevise.web.domain.model.Response;
 import com.udevise.web.domain.model.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserUtils {
 
@@ -48,6 +52,18 @@ public class UserUtils {
 
   public static User getUserFromPrincipal(Principal principal) {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
-    return (User) token.getPrincipal();
+    if (token != null){
+      return (User) token.getPrincipal();
+    }
+    return null;
+  }
+
+  public static boolean hasUserResponded(User user, String id) {
+    if (user!= null) {
+      if (user.getResponseMap() != null) {
+        return user.getResponseMap().containsKey(id);
+      }
+    }
+    return false;
   }
 }

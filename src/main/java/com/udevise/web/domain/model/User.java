@@ -1,9 +1,13 @@
 package com.udevise.web.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
+import java.util.Map;
 
 @Document
 public class User {
@@ -17,6 +21,8 @@ public class User {
   @Indexed
   private String emailAddress;
   private String imageUrl;
+  @JsonIgnore
+  private Map<String,String> responseMap;
 
   public String getFirstName() {
     return firstName;
@@ -58,4 +64,11 @@ public class User {
     this.id = id;
   }
 
+  public Map<String, String> getResponseMap() {
+    return responseMap;
+  }
+
+  public void setResponseMap(Map<String, String> responseMap) {
+    this.responseMap = responseMap;
+  }
 }
