@@ -15,7 +15,7 @@ public class Response {
     this.responseId = responseId;
   }
 
-  public String responseId;
+  private String responseId;
 
   @DBRef
   private User user;

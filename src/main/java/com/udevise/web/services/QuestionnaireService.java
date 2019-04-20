@@ -6,6 +6,7 @@ import com.udevise.web.domain.model.Questionnaire;
 import com.udevise.web.domain.requests.ResponseRequest;
 import com.udevise.web.domain.model.User;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface QuestionnaireService {
@@ -18,6 +19,7 @@ public interface QuestionnaireService {
   Questionnaire getQuestionnairesByIdAndCreatorId(String id, User user);
   Questionnaire getResponseDetails(String questionnaireId, User user);
   Questionnaire getResponseDetails(String questionnaireId, User user, String responseId);
+  byte[] getQuestionnaireResponseReport(String questionnaireId, User user) throws IOException;
 
 
     //Questionnaire getQuestionnaireForResponses(String id);

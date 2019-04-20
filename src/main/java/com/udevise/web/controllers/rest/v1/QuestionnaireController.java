@@ -9,14 +9,10 @@ import com.udevise.web.services.QuestionnaireServiceImpl;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.Principal;
 import java.util.List;
 
@@ -24,8 +20,11 @@ import java.util.List;
 @RequestMapping("/api/v1/questionnaire")
 public class QuestionnaireController {
 
-  @Autowired
   QuestionnaireServiceImpl questionnaireService;
+
+  public QuestionnaireController(QuestionnaireServiceImpl questionnaireService) {
+    this.questionnaireService = questionnaireService;
+  }
 
   @PostMapping
   public ResponseEntity<Questionnaire> createQuestionnaire(@RequestBody @Valid Questionnaire questionnaire, Principal principal) {
@@ -62,14 +61,5 @@ public class QuestionnaireController {
 
   }
 
-  @GetMapping(path = "/{id}/report",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public @ResponseBody byte[] getFile() throws IOException {
-    InputStream in = getClass()
-      .getResourceAsStream("/com/udevise/web/config/Auth0Config.java");
-    File tempFile = File.createTempFile("prefix-", "-suffix");
-//File tempFile = File.createTempFile("MyAppName-", ".tmp");
-    tempFile.deleteOnExit();
-    return IOUtils.toByteArray(    tempFile.toURI());
-  }
 
 }

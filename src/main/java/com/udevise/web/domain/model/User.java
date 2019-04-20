@@ -12,6 +12,20 @@ import java.util.Map;
 @Document
 public class User {
 
+  public User() {
+  }
+
+  public User(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
+
+  public User(String firstName, String lastName, String emailAddress, String imageUrl) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.emailAddress = emailAddress;
+    this.imageUrl = imageUrl;
+  }
+
   @Id
   @Indexed
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)

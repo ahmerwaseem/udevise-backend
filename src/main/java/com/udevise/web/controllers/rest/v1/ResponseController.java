@@ -5,10 +5,16 @@ import com.udevise.web.domain.model.Questionnaire;
 import com.udevise.web.domain.model.User;
 import com.udevise.web.domain.requests.ResponseRequest;
 import com.udevise.web.services.QuestionnaireService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 
 @RestController
@@ -35,6 +41,13 @@ public class ResponseController {
   @GetMapping("/detail/{questionnaireId}/{responseId}")
   public Questionnaire getResponseDetailForQuestionnaireTaker(@PathVariable String questionnaireId, @PathVariable String responseId, Principal principal) {
     return questionnaireService.getResponseDetails(questionnaireId,UserUtils.getUserFromPrincipal(principal),responseId);
+  }
+
+  @GetMapping(path = "/{id}/report",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  public @ResponseBody byte[] getFile(@PathVariable String id) throws IOException {
+    User user = new User();
+    user.setId("5c9d7975d79729194cba57a5");
+    return questionnaireService.getQuestionnaireResponseReport(id, user);
   }
 
 }

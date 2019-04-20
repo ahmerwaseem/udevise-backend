@@ -1,5 +1,6 @@
 package com.udevise.web.services;
 
+import com.udevise.web.Utilities.StringUtils;
 import com.udevise.web.Utilities.UserUtils;
 import com.udevise.web.domain.enums.QuestionnaireType;
 import com.udevise.web.domain.model.*;
@@ -10,17 +11,19 @@ import com.udevise.web.domain.responses.ResponseDetail;
 import com.udevise.web.exceptions.DataMismatchException;
 import com.udevise.web.exceptions.NotFoundException;
 import com.udevise.web.repositories.QuestionnaireRepository;
-import com.udevise.web.repositories.ResponseRepository;
 import com.udevise.web.repositories.UserRepository;
+import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.udevise.web.Utilities.UserUtils.hasUserResponded;
 
@@ -28,13 +31,11 @@ import static com.udevise.web.Utilities.UserUtils.hasUserResponded;
 public class QuestionnaireServiceImpl implements QuestionnaireService {
 
   private QuestionnaireRepository questionnaireRepository;
-  private ResponseRepository responseRepository;
   private MongoTemplate mongoTemplate;
   private UserRepository userRepository;
 
-  public QuestionnaireServiceImpl(QuestionnaireRepository questionnaireRepository, ResponseRepository responseRepository, MongoTemplate mongoTemplate, UserRepository userRepository) {
+  public QuestionnaireServiceImpl(QuestionnaireRepository questionnaireRepository, MongoTemplate mongoTemplate, UserRepository userRepository) {
     this.questionnaireRepository = questionnaireRepository;
-    this.responseRepository = responseRepository;
     this.mongoTemplate = mongoTemplate;
     this.userRepository = userRepository;
   }
@@ -252,4 +253,61 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     questionnaire.setEndDateTime(null);
     questionnaire.setUsersAllowedByEmail(null);
   }
+
+  public byte[] getQuestionnaireResponseReport(String id, User user) throws IOException{
+
+    Questionnaire questionnaire = getQuestionnairesByIdAndCreatorId(id,user);
+    File tmpFile = File.createTempFile("temp", ".tmp");
+    FileWriter writer = new FileWriter(tmpFile);
+    HashMap<String,StringBuilder> responseMap = new HashMap<>();
+    HashMap<String,User> userMap = new HashMap<>();
+
+    for (Response response : questionnaire.getResponses()){
+      userMap.put(response.getResponseId(),response.getUser());
+    }
+
+
+    writer.append(StringUtils.TAB);
+    for (Question question : questionnaire.getQuestions()){
+      writer.append(question.getQuestion()).append(StringUtils.TAB);
+      if (questionnaire.getType()==QuestionnaireType.QUIZ) {
+        writer.append(StringUtils.replaceIfNull(question.getCorrectAnswer(), "")).append(StringUtils.TAB);
+      }
+
+      for (Answer answer: question.getAnswersGiven()){
+        StringBuilder userResponseStr = new StringBuilder();
+        if (responseMap.get(answer.getResponseId())!=null){
+          userResponseStr = responseMap.get(answer.getResponseId());
+        }
+        userResponseStr.append(StringUtils.replaceIfNull(answer.getAnswer(),"")).append(StringUtils.TAB);
+        if (questionnaire.getType()==QuestionnaireType.QUIZ) {
+          userResponseStr.append(StringUtils.replaceIfNull(question.getCorrectAnswer(),"")).append(StringUtils.TAB);
+        }
+        responseMap.put(answer.getResponseId(),userResponseStr);
+      }
+    }
+
+
+
+    writer.append(StringUtils.NEWLINE);
+    Iterator iterator = responseMap.entrySet().iterator();
+    while (iterator.hasNext()) {
+        Map.Entry entry = (Map.Entry) iterator.next();
+        StringBuilder strToWrite = (StringBuilder) entry.getValue();
+        String userEmail = null;
+        if (userMap.get(entry.getKey()) != null){
+          userEmail = userMap.get(entry.getKey()).getEmailAddress();
+        }
+        if (userEmail == null || userEmail.isEmpty()) {
+          userEmail = "Anonymous";
+        }
+        strToWrite.insert(0, userEmail + StringUtils.TAB);
+        writer.append(strToWrite.toString()).append(StringUtils.NEWLINE);
+
+    }
+
+    writer.close();
+    return IOUtils.toByteArray(tmpFile.toURI());
+  }
+
 }
