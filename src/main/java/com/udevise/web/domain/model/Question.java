@@ -18,7 +18,7 @@ public class Question {
   private String question;
   private List<String> answersAllowed;
   private List<Answer> answersGiven;
-  private String correctAnswer;
+  private List<String> correctAnswer;
   boolean required;
 
   public String getId() {
@@ -61,19 +61,19 @@ public class Question {
     this.answersAllowed = answersAllowed;
   }
 
-  public String getCorrectAnswer() {
-    return correctAnswer;
-  }
-
-  public void setCorrectAnswer(String correctAnswer) {
-    this.correctAnswer = correctAnswer;
-  }
-
   public List<Answer> getAnswersGiven() {
     return answersGiven;
   }
 
   public void setAnswersGiven(List<Answer> answersGiven) {
     this.answersGiven = answersGiven;
+  }
+
+  public List<String> getCorrectAnswer() {
+    return correctAnswer;
+  }
+
+  public void setCorrectAnswer(List<String> correctAnswer) {
+    this.correctAnswer = correctAnswer;
   }
 }

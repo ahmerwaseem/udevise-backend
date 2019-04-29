@@ -5,11 +5,13 @@ import com.udevise.web.Utilities.UserUtils;
 import com.udevise.web.domain.enums.QuestionnaireType;
 import com.udevise.web.domain.model.*;
 import com.udevise.web.domain.requests.AnswerRequest;
+import com.udevise.web.domain.requests.GradeRequest;
 import com.udevise.web.domain.requests.ResponseRequest;
 import com.udevise.web.domain.enums.QuestionType;
 import com.udevise.web.domain.responses.ResponseDetail;
 import com.udevise.web.exceptions.DataMismatchException;
 import com.udevise.web.exceptions.NotFoundException;
+import com.udevise.web.exceptions.UnauthorizedException;
 import com.udevise.web.repositories.QuestionnaireRepository;
 import com.udevise.web.repositories.UserRepository;
 import org.apache.commons.io.IOUtils;
@@ -100,6 +102,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
   }
 
   public Questionnaire getQuestionnairesByIdAndCreatorId(String id, User user) {
+    if (user == null){
+      throw new NotFoundException();
+    }
     Optional<Questionnaire> questionnaire = questionnaireRepository.findByIdAndCreatorId(id,user.getId());
     if (!questionnaire.isPresent()){
       throw new NotFoundException();
@@ -168,7 +173,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     Boolean isCorrectAnswer = null;
     if (questionnaire.get().getType() == QuestionnaireType.QUIZ
       && question.getCorrectAnswer() != null) {
-      return question.getCorrectAnswer().equalsIgnoreCase(answerRequest.getAnswer());
+      return question.getCorrectAnswer().containsAll(answerRequest.getAnswer())
+        && answerRequest.getAnswer().containsAll(question.getCorrectAnswer());
     }
     return isCorrectAnswer;
   }
@@ -203,7 +209,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     if (responses != null) {
       Optional<Response> userResponse = null;
       if (responseId != null){
-        userResponse = responses.stream().filter(o -> responseId.equals(o.getResponseId())).findFirst();
+        if (questionnaire.get().getCreatorId() != null && questionnaire.get().getCreatorId().equals(user.getId())) {
+          userResponse = responses.stream().filter(o -> responseId.equals(o.getResponseId())).findFirst();
+        } else throw new NotFoundException();
       } else {
         userResponse = responses.stream().filter(o -> user.getId().equals(o.getUser().getId())).findFirst();
       }
@@ -246,7 +254,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
       }
     }
 
-    questionnaire.setResponses(null);
+    List<Response> responseList = new ArrayList<>();
+    responseList.add(userResponse);
+    questionnaire.setResponses(responseList);
     questionnaire.setCreatorId(null);
     questionnaire.setCreateTime(null);
     questionnaire.setBeginDateTime(null);
@@ -269,9 +279,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     writer.append(StringUtils.TAB);
     for (Question question : questionnaire.getQuestions()){
-      writer.append(question.getQuestion()).append(StringUtils.TAB);
-      if (questionnaire.getType()==QuestionnaireType.QUIZ) {
-        writer.append(StringUtils.replaceIfNull(question.getCorrectAnswer(), "")).append(StringUtils.TAB);
+      writer.append(question.getQuestion());
+      if (question.getType() == QuestionType.TEXT || question.getType() == QuestionType.TEXTAREA){
+        writer.append(" (Free Form)");
+      }
+      writer.append(StringUtils.TAB);
+
+      if (questionnaire.getType()==QuestionnaireType.QUIZ && question.getCorrectAnswer() != null) {
+        writer.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(), "")).append(StringUtils.TAB);
       }
 
       for (Answer answer: question.getAnswersGiven()){
@@ -279,9 +294,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         if (responseMap.get(answer.getResponseId())!=null){
           userResponseStr = responseMap.get(answer.getResponseId());
         }
-        userResponseStr.append(StringUtils.replaceIfNull(answer.getAnswer(),"")).append(StringUtils.TAB);
-        if (questionnaire.getType()==QuestionnaireType.QUIZ) {
-          userResponseStr.append(StringUtils.replaceIfNull(question.getCorrectAnswer(),"")).append(StringUtils.TAB);
+        userResponseStr.append(StringUtils.replaceIfNull(answer.getAnswer().toString(),"")).append(StringUtils.TAB);
+        if (questionnaire.getType()==QuestionnaireType.QUIZ  && question.getCorrectAnswer() != null) {
+          userResponseStr.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(),"")).append(StringUtils.TAB);
         }
         responseMap.put(answer.getResponseId(),userResponseStr);
       }
@@ -310,4 +325,27 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     return IOUtils.toByteArray(tmpFile.toURI());
   }
 
+  public void submitGradeAndFeedback(GradeRequest gradeRequest, User user, String questionnaireId, String responseId) {
+    Optional<Questionnaire> questionnaireOptional = questionnaireRepository.findByIdAndCreatorIdAndType(questionnaireId,user.getId(),QuestionnaireType.QUIZ);
+    if (!questionnaireOptional.isPresent()){
+      throw new NotFoundException();
+    }
+
+    Questionnaire questionnaire = questionnaireOptional.get();
+
+    List<Response> responseList = questionnaire.getResponses();
+
+    if (responseList != null){
+      Optional<Response> responseOptional = responseList.stream().filter(item -> item.getResponseId().equals(responseId)).findFirst();
+      if (!responseOptional.isPresent()){
+        throw new NotFoundException();
+      }
+
+      responseOptional.get().setScore(gradeRequest.getScore());
+      responseOptional.get().setFeedback(gradeRequest.getFeedback());
+
+      questionnaireRepository.save(questionnaire);
+    }
+
+  }
 }

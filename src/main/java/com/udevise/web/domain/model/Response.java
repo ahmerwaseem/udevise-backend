@@ -20,6 +20,10 @@ public class Response {
   @DBRef
   private User user;
 
+  private Double score;
+
+  private String feedback;
+
   @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
   private Date submitTime = Date.from(Instant.now());
 
@@ -45,5 +49,21 @@ public class Response {
 
   public void setResponseId(String responseId) {
     this.responseId = responseId;
+  }
+
+  public Double getScore() {
+    return score;
+  }
+
+  public void setScore(Double score) {
+    this.score = score;
+  }
+
+  public String getFeedback() {
+    return feedback;
+  }
+
+  public void setFeedback(String feedback) {
+    this.feedback = feedback;
   }
 }

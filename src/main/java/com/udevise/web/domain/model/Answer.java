@@ -2,9 +2,11 @@ package com.udevise.web.domain.model;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.List;
+
 public class Answer {
 
-  public Answer(User user, String answer, String responseId, Boolean correct) {
+  public Answer(User user, List<String> answer, String responseId, Boolean correct) {
     this.user = user;
     this.answer = answer;
     this.responseId = responseId;
@@ -17,15 +19,15 @@ public class Answer {
   @DBRef
   private User user;
 
-  private String answer;
+  private List<String> answer;
 
   private String responseId;
 
-  public String getAnswer() {
+  public List<String> getAnswer() {
     return answer;
   }
 
-  public void setAnswer(String answer) {
+  public void setAnswer(List<String> answer) {
     this.answer = answer;
   }
 

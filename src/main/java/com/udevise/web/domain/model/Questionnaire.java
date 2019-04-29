@@ -16,7 +16,7 @@ import java.util.List;
 
 @Document
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Questionnaire {
+public class Questionnaire implements Comparable<Questionnaire>{
 
   @Id
   @Indexed
@@ -38,8 +38,16 @@ public class Questionnaire {
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   @JsonFormat(pattern="MM-dd-yyyy HH:mm:ss")
   private Date createTime;
+  private Boolean active;
 
-  
+  public Boolean getActive() {
+    return active;
+  }
+
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
   private List<String> usersAllowedByEmail;
 
   public String getId() {
@@ -128,5 +136,10 @@ public class Questionnaire {
 
   public void setCreateTime(Date createTime) {
     this.createTime = createTime;
+  }
+
+  @Override
+  public int compareTo(Questionnaire q) {
+    return q.getCreateTime().compareTo(this.createTime);
   }
 }

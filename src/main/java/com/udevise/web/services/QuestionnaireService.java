@@ -3,6 +3,7 @@ package com.udevise.web.services;
 import com.udevise.web.domain.enums.QuestionType;
 import com.udevise.web.domain.enums.QuestionnaireType;
 import com.udevise.web.domain.model.Questionnaire;
+import com.udevise.web.domain.requests.GradeRequest;
 import com.udevise.web.domain.requests.ResponseRequest;
 import com.udevise.web.domain.model.User;
 
@@ -20,6 +21,8 @@ public interface QuestionnaireService {
   Questionnaire getResponseDetails(String questionnaireId, User user);
   Questionnaire getResponseDetails(String questionnaireId, User user, String responseId);
   byte[] getQuestionnaireResponseReport(String questionnaireId, User user) throws IOException;
+  void submitGradeAndFeedback(GradeRequest gradeRequest, User user, String questionnaireId, String responseId);
+
 
 
     //Questionnaire getQuestionnaireForResponses(String id);

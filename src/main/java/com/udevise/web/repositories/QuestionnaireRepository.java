@@ -1,5 +1,6 @@
 package com.udevise.web.repositories;
 
+import com.udevise.web.domain.enums.QuestionnaireType;
 import com.udevise.web.domain.model.Questionnaire;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,5 @@ public interface QuestionnaireRepository extends PagingAndSortingRepository<Ques
   Optional<List<Questionnaire>> findByCreatorId(String id);
   Optional<Questionnaire> getQuestionnairesById(String id);
   Questionnaire save(Questionnaire questionnaire);
+  Optional<Questionnaire> findByIdAndCreatorIdAndType(String id, String creatorId, QuestionnaireType type);
 }

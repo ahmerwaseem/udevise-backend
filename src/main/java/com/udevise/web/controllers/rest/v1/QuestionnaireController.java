@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -50,7 +51,9 @@ public class QuestionnaireController {
   @GetMapping
   public List<Questionnaire> getQuestionnairesForUser(Principal principal) {
     User user = UserUtils.getUserFromPrincipal(principal);
-    return questionnaireService.getQuestionnairesByUser(user);
+    List<Questionnaire> questionnaireList = questionnaireService.getQuestionnairesByUser(user);
+    Collections.sort(questionnaireList);
+    return questionnaireList;
 
   }
 
