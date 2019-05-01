@@ -47,9 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().cors().and().authorizeRequests()
-      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire").permitAll()
-      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/{id}*").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/v1/questionnaire").permitAll()
+      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire").authenticated()
+      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/survey/{id}").permitAll()
+      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/quiz/{id}").authenticated()
+      .antMatchers(HttpMethod.POST, "/api/v1/questionnaire").authenticated()
+      .antMatchers(HttpMethod.GET, "/api/v1/questionnaire/{id}/detail").authenticated()
+      .antMatchers(HttpMethod.POST, "/api/v1/response").permitAll()
+      .antMatchers(HttpMethod.PUT, "/api/v1/response/**").authenticated()
+      .antMatchers(HttpMethod.GET, "/api/v1/response/**").authenticated()
       .and()
       .addFilter(new JWTAuthorizationFilter(authenticationManager(),auth0Properties, userService)) ;
   }

@@ -10,6 +10,7 @@ import io.jsonwebtoken.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -78,12 +79,21 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   }
 
   private User processUser(Jws<Claims> claimsJws) {
-    LinkedHashMap map = (LinkedHashMap)claimsJws.getBody().get("https://udevise.com/userInfo");
+    LinkedHashMap map = (LinkedHashMap)claimsJws.getBody().get(auth0Properties.getUserClaim());
 
     String email = (String)map.get("email");
     if (email != null) {
       User user = userService.findUserByEmail(email);
-      user = userService.save(UserUtils.getUserDetails(user,map));
+      if (user == null) {
+        user = UserUtils.getUserDetails(user,map);
+        //double check, race conditions on api calls
+        User checkAgain = userService.findUserByEmail(email);
+        if (checkAgain== null) {
+          user = userService.save(user);
+        } else {
+          return checkAgain;
+        }
+      }
       return user;
     }
     return null;

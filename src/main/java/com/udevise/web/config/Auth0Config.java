@@ -12,12 +12,15 @@ public class Auth0Config {
   String apiAudience;
   @Value(value = "${auth0.issuer}")
   String issuer;
+  @Value(value = "${auth0.userInfo.claim.name}")
+  String userClaim;
 
   @Bean
   public Auth0Properties getAuth0Properties() {
     Auth0Properties auth0Properties = new Auth0Properties();
     auth0Properties.setApiAudience(apiAudience);
     auth0Properties.setIssuer(issuer);
+    auth0Properties.setUserClaim(userClaim);
     return auth0Properties;
   }
 

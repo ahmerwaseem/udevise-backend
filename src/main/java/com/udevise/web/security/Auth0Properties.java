@@ -3,6 +3,7 @@ package com.udevise.web.security;
 public class Auth0Properties {
   String apiAudience;
   String issuer;
+  String userClaim;
 
   public String getApiAudience() {
     return apiAudience;
@@ -18,5 +19,13 @@ public class Auth0Properties {
 
   public void setIssuer(String issuer) {
     this.issuer = issuer;
+  }
+
+  public String getUserClaim() {
+    return userClaim;
+  }
+
+  public void setUserClaim(String userClaim) {
+    this.userClaim = userClaim;
   }
 }

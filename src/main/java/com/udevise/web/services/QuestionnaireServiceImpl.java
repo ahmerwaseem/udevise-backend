@@ -119,7 +119,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     if (questionnaire.isPresent() & questionnaire.get().getType() == QuestionnaireType.QUIZ && user == null){
-      throw new DataMismatchException("Looks like you took a wrong turn!");
+      throw new DataMismatchException("Something went wrong. Please try again later");
     }
 
     if (questionnaire.get().getType()==QuestionnaireType.SURVEY){
