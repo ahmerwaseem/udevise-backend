@@ -57,7 +57,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request)  {
     String token = request.getHeader(HEADER_STRING);
     System.out.println("token" + token);
-    Jws<Claims> claimsJws;
+    Jws<Claims> claimsJws = null;
     try {
       if (token != null) {
         token = token.replace(TOKEN_PREFIX, "");
@@ -73,6 +73,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null;
       }
     } catch (Exception e) {
+      logger.debug("token:" + token + "\nClaims: " + claimsJws.toString()+"\nException thrown in getAuthentication:", e);
       return null;
     }
     return null;
@@ -83,18 +84,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     String email = (String)map.get("email");
     if (email != null) {
-      User user = userService.findUserByEmail(email);
-      if (user == null) {
-        user = UserUtils.getUserDetails(user,map);
-        //double check, race conditions on api calls
-        User checkAgain = userService.findUserByEmail(email);
-        if (checkAgain== null) {
-          user = userService.save(user);
-        } else {
-          return checkAgain;
-        }
-      }
-      return user;
+      return userService.findUserByEmail(email.trim().toLowerCase());
     }
     return null;
   }
