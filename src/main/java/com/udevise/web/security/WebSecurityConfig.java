@@ -33,9 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     //default react port and location
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+    configuration.setAllowedOrigins(Arrays.asList(
+      "http://localhost:3000",
+      "http://udevise.com",
+      "https://udevise.com",
+      "http://www.udevise.com",
+      "https://www.udevise.com"
+      ));
     //configure all type of restful calls we make here
-    configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT"));
     configuration.setAllowCredentials(true);
     //need that sweet jwt
     configuration.addAllowedHeader  ("Authorization");
