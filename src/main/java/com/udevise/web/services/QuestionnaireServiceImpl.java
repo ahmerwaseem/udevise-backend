@@ -272,45 +272,45 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     HashMap<String,StringBuilder> responseMap = new HashMap<>();
     HashMap<String,User> userMap = new HashMap<>();
 
-    for (Response response : questionnaire.getResponses()){
-      userMap.put(response.getResponseId(),response.getUser());
-    }
-
-
-    writer.append(StringUtils.TAB);
-    for (Question question : questionnaire.getQuestions()){
-      writer.append(question.getQuestion());
-      if (question.getType() == QuestionType.TEXT || question.getType() == QuestionType.TEXTAREA){
-        writer.append(" (Free Form)");
+    if (questionnaire.getResponses() != null) {
+      for (Response response : questionnaire.getResponses()) {
+        userMap.put(response.getResponseId(), response.getUser());
       }
+
+
       writer.append(StringUtils.TAB);
+      for (Question question : questionnaire.getQuestions()) {
+        writer.append(question.getQuestion());
+        if (question.getType() == QuestionType.TEXT || question.getType() == QuestionType.TEXTAREA) {
+          writer.append(" (Free Form)");
+        }
+        writer.append(StringUtils.TAB);
 
-      if (questionnaire.getType()==QuestionnaireType.QUIZ && question.getCorrectAnswer() != null) {
-        writer.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(), "")).append(StringUtils.TAB);
+        if (questionnaire.getType() == QuestionnaireType.QUIZ && question.getCorrectAnswer() != null) {
+          writer.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(), "")).append(StringUtils.TAB);
+        }
+
+        for (Answer answer : question.getAnswersGiven()) {
+          StringBuilder userResponseStr = new StringBuilder();
+          if (responseMap.get(answer.getResponseId()) != null) {
+            userResponseStr = responseMap.get(answer.getResponseId());
+          }
+          userResponseStr.append(StringUtils.replaceIfNull(answer.getAnswer().toString(), "")).append(StringUtils.TAB);
+          if (questionnaire.getType() == QuestionnaireType.QUIZ && question.getCorrectAnswer() != null) {
+            userResponseStr.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(), "")).append(StringUtils.TAB);
+          }
+          responseMap.put(answer.getResponseId(), userResponseStr);
+        }
       }
 
-      for (Answer answer: question.getAnswersGiven()){
-        StringBuilder userResponseStr = new StringBuilder();
-        if (responseMap.get(answer.getResponseId())!=null){
-          userResponseStr = responseMap.get(answer.getResponseId());
-        }
-        userResponseStr.append(StringUtils.replaceIfNull(answer.getAnswer().toString(),"")).append(StringUtils.TAB);
-        if (questionnaire.getType()==QuestionnaireType.QUIZ  && question.getCorrectAnswer() != null) {
-          userResponseStr.append(StringUtils.replaceIfNull(question.getCorrectAnswer().toString(),"")).append(StringUtils.TAB);
-        }
-        responseMap.put(answer.getResponseId(),userResponseStr);
-      }
-    }
 
-
-
-    writer.append(StringUtils.NEWLINE);
-    Iterator iterator = responseMap.entrySet().iterator();
-    while (iterator.hasNext()) {
+      writer.append(StringUtils.NEWLINE);
+      Iterator iterator = responseMap.entrySet().iterator();
+      while (iterator.hasNext()) {
         Map.Entry entry = (Map.Entry) iterator.next();
         StringBuilder strToWrite = (StringBuilder) entry.getValue();
         String userEmail = null;
-        if (userMap.get(entry.getKey()) != null){
+        if (userMap.get(entry.getKey()) != null) {
           userEmail = userMap.get(entry.getKey()).getEmailAddress();
         }
         if (userEmail == null || userEmail.isEmpty()) {
@@ -319,6 +319,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         strToWrite.insert(0, userEmail + StringUtils.TAB);
         writer.append(strToWrite.toString()).append(StringUtils.NEWLINE);
 
+      }
+    } else {
+      writer.append("No responses given");
     }
 
     writer.close();
