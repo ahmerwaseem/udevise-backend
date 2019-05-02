@@ -28,7 +28,7 @@ public class UserController {
     return userService.getResponsesUserSubmitted(UserUtils.getUserFromPrincipal(principal));
   }
 
-  @PutMapping()
+  @PostMapping()
   public void saveUser(@Valid @RequestBody SaveUserRequest data){
     if (userService.findUserByEmail(data.getEmail())==null){
       userService.save(UserMapper.mapSaveUserRequestToUser(data));
