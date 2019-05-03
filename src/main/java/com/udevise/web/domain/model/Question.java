@@ -19,7 +19,7 @@ public class Question {
   private List<String> answersAllowed;
   private List<Answer> answersGiven;
   private List<String> correctAnswer;
-  boolean required;
+  private Boolean required;
 
   public String getId() {
     return id;
@@ -29,11 +29,11 @@ public class Question {
     this.id = id;
   }
 
-  public boolean isRequired() {
+  public Boolean isRequired() {
     return required;
   }
 
-  public void setRequired(boolean required) {
+  public void setRequired(Boolean required) {
     this.required = required;
   }
 
